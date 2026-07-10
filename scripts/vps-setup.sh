@@ -38,10 +38,17 @@ fi
 if [ ! -f .env ]; then
     echo "Creating .env file..."
     cat > .env << 'EOF'
-NEXT_PUBLIC_API_URL=https://didegan.com
+NEXT_PUBLIC_API_URL=
 NEXT_PUBLIC_TELEGRAM_BOT_USERNAME=apletbot
 EOF
     echo "Created .env - edit it if needed."
+fi
+
+# Check SSL certs exist
+if [ ! -f aplet_cert.pem ] || [ ! -f aplet_key.pem ]; then
+    echo "WARNING: SSL cert files (aplet_cert.pem, aplet_key.pem) not found!"
+    echo "Place them in $APP_DIR before starting."
+    exit 1
 fi
 
 # Build and start
@@ -50,7 +57,7 @@ docker compose up -d --build
 
 echo ""
 echo "=== Setup Complete ==="
-echo "App is running at http://$(hostname -I | awk '{print $1}'):3000"
+echo "App is running at https://aplet.ir"
 echo ""
 echo "To update later, run:"
 echo "  cd $APP_DIR && git pull && docker compose up -d --build"
