@@ -1,6 +1,6 @@
 import type { ApiError, AuthTokens } from "@/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://didegan.com";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
