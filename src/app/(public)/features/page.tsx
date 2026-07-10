@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const features = [
-  { icon: Megaphone, title: "کمپین‌های عضوگیری", description: "کمپین‌های هدفمند اسپانسرشیپ ایجاد کنید و مخاطبان واقعی را جذب کنید. با قیمت‌گذاری شفاف و گزارش‌گیری لحظه‌ای.", color: "from-[#5B5FEF]/10 to-[#3B82F6]/10", iconColor: "text-[#5B5FEF]" },
+  { icon: Megaphone, title: "کمپین‌های عضوگیری", description: "کمپین‌های هدفمند اسپانسرشیپ ایجاد کنید و مخاطبان واقعی را جذب کنید. با تعرفه شفاف و گزارش‌گیری لحظه‌ای.", color: "from-[#5B5FEF]/10 to-[#3B82F6]/10", iconColor: "text-[#5B5FEF]" },
   { icon: Radio, title: "مدیریت پلتفرم", description: "کانال‌ها و گروه‌های تلگرامی خود را مدیریت کنید. ادمین‌ها را اضافه کنید و عملکرد هر پلتفرم را رصد کنید.", color: "from-[#3B82F6]/10 to-[#10B981]/10", iconColor: "text-[#3B82F6]" },
   { icon: Bot, title: "بات‌های محتوا", description: "بات‌های هوشمند محتوا را به کانال‌های خود متصل کنید. محتوای خودکار و منظم منتشر کنید.", color: "from-[#10B981]/10 to-[#059669]/10", iconColor: "text-[#10B981]" },
   { icon: TrendingUp, title: "درآمدزایی", description: "از مخاطبان خود درآمد کسب کنید. درآمد خود را به تومان یا TON برداشت کنید.", color: "from-[#F59E0B]/10 to-[#D97706]/10", iconColor: "text-[#F59E0B]" },
