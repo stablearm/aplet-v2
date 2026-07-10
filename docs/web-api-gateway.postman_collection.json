@@ -1,0 +1,1402 @@
+{
+  "info": {
+    "name": "Didegan Platform - Web API Gateway",
+    "description": "Complete API collection for the Didegan/MembersFactory platform.\n\nBase URL: {{baseUrl}}/api/v1\n\n## Authentication\nAll authenticated endpoints require a Bearer token in the Authorization header.\n1. Register or login via /auth/register or /auth/login\n2. Use the returned accessToken as the Bearer token\n3. When the token expires, use /auth/refresh with the refreshToken to get a new pair\n\n## Modules\n- **Auth** - Registration, login, Telegram Mini App auth, profile management\n- **Advertiser Wallet** - TON wallet, deposits, balance, transactions\n- **Advertiser Campaigns** - Create/manage member acquisition campaigns\n- **Publisher Platforms** - Register and manage advertising bot platforms\n- **Publisher Earnings** - Track earnings, withdraw funds\n- **Publisher Custom Campaigns** - Register custom campaigns\n- **Content Bots** - AI-powered auto-posting bots for channels\n- **Subscriptions** - Content bot subscription packages\n- **Merchant Wallet** - Merchant TON wallet and deposits\n- **Marketplace** - Buy/sell Telegram channels and groups",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Authentication & Identity management endpoints. Supports email/password registration, login, Telegram Mini App authentication, token refresh, and profile management.",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Telegram Mini App Auth",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initData\": \"user=%7B%22id%22%3A123456789%2C%22first_name%22%3A%22John%22%2C%22username%22%3A%22johndoe%22%7D&auth_date=1234567890&hash=abc123...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/telegram-mini-app",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "telegram-mini-app"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"telegramId\": \"123456789\",\n  \"telegramUsername\": \"johndoe\",\n  \"phoneNumber\": \"+989121234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Link Telegram",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initData\": \"telegram_mini_app_init_data_string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me/link-telegram",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me", "link-telegram"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Advertiser - Wallet",
+      "description": "Advertiser wallet management. Handles TON blockchain wallet info, deposit addresses, balance checking (auto-sweeps TON to Toman), and transaction history.",
+      "item": [
+        {
+          "name": "Get Wallet Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallet"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Deposit Address",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallet/deposit-address",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallet", "deposit-address"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallet/balance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallet", "balance"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check Deposit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallet/check-deposit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallet", "check-deposit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/wallet/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "wallet", "transactions"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Advertiser - Campaigns",
+      "description": "Campaign management for advertisers. Create member acquisition campaigns for Telegram channels, verify channel admin status, manage campaign lifecycle (pause/resume/cancel), and check pricing.",
+      "item": [
+        {
+          "name": "Get Pricing",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns/pricing",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns", "pricing"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Summer promotion\",\n  \"channelUsername\": \"mychannel\",\n  \"targetSubscriberCount\": 5000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Retry Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"campaignId\": \"CAMPAIGN_ID_HERE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns?status=active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active",
+                  "description": "Filter by status: active, paused, completed, cancelled, pending_payment"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Campaign Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns/CAMPAIGN_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns", "CAMPAIGN_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pause Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns/CAMPAIGN_ID/pause",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns", "CAMPAIGN_ID", "pause"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resume Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns/CAMPAIGN_ID/resume",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns", "CAMPAIGN_ID", "resume"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/campaigns/CAMPAIGN_ID/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "campaigns", "CAMPAIGN_ID", "cancel"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Publisher - Platforms",
+      "description": "Advertising platform management for publishers. Register Telegram bot platforms, configure follow quotas, manage webhook setup, and administer platform bot admins.",
+      "item": [
+        {
+          "name": "Create Platform",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channelUsername\": \"mychannel\",\n  \"botToken\": \"1234567890:ABCDefGhIJKlmNoPQRsTUVwxyZ\",\n  \"followQuota\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Platforms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Platform Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms/PLATFORM_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms", "PLATFORM_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Platform",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"followQuota\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms/PLATFORM_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms", "PLATFORM_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Platform",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms/PLATFORM_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms", "PLATFORM_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adminTelegramId\": \"123456789\",\n  \"adminUsername\": \"username\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms/PLATFORM_ID/admins",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms", "PLATFORM_ID", "admins"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/platforms/PLATFORM_ID/admins/ADMIN_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "platforms", "PLATFORM_ID", "admins", "ADMIN_ID"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Publisher - Earnings",
+      "description": "Publisher earnings tracking and withdrawal management. View earnings from member campaigns, check statistics, and request withdrawals in TON or Toman.",
+      "item": [
+        {
+          "name": "Get Earnings Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/earnings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "earnings"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Withdrawal History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/earnings/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "earnings", "transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Request Withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"ton_coin\",\n  \"address\": \"EQ... (TON address or card number)\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/earnings/withdraw",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "earnings", "withdraw"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Earnings Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/earnings/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "earnings", "stats"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Publisher - Custom Campaigns",
+      "description": "Manage publisher custom campaigns. Register channels for custom advertising campaigns (max 3 per publisher) and remove them.",
+      "item": [
+        {
+          "name": "List Custom Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/custom-campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "custom-campaigns"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Custom Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channelUsername\": \"mychannel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/custom-campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "custom-campaigns"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Custom Campaign",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/custom-campaigns/0",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "custom-campaigns", "0"],
+              "query": [],
+              "variable": []
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Content Bots",
+      "description": "AI-powered content bot management. Create auto-posting bots for Telegram channels with topic selection, signature customization, rate limiting, and subscription-based access. Merges the 7-step Telegram wizard into one API call.",
+      "item": [
+        {
+          "name": "Create Content Bot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channelUsername\": \"mychannel\",\n  \"botToken\": \"1234567890:ABCDefGhIJKlmNoPQRsTUVwxyZ\",\n  \"selectedTopics\": [\"politics\", \"cryptocurrency\"],\n  \"postSignature\": \"Powered by AI | @mychannel\",\n  \"subscriptionType\": \"one_month\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Content Bots",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Content Bot Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Topics",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topics\": [\"politics\", \"cryptocurrency\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID/topics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID", "topics"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Signature",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signature\": \"Powered by AI\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID/signature",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID", "signature"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Post Limits",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slot1\": 5,\n  \"slot2\": 5,\n  \"slot3\": 5,\n  \"slot4\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID/post-limits",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID", "post-limits"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Bot Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID/toggle-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID", "toggle-status"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Content Bot",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/content-bots/BOT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "content-bots", "BOT_ID"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "description": "Content bot subscription management. View available packages and pricing, activate subscriptions, and check subscription status for content bots.",
+      "item": [
+        {
+          "name": "List Subscription Packages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/subscriptions/packages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "subscriptions", "packages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contentBotId\": \"BOT_ID_HERE\",\n  \"packageType\": \"one_month\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/subscriptions/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "subscriptions", "activate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subscription Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/subscriptions/BOT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "subscriptions", "BOT_ID"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Merchant - Wallet",
+      "description": "Merchant wallet management. Similar to advertiser wallet but uses Telegram ID for user lookup. Handles TON deposits, balance checks, and transaction history.",
+      "item": [
+        {
+          "name": "Get Merchant Wallet Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchant/wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "merchant", "wallet"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Merchant Deposit Address",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchant/wallet/deposit-address",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "merchant", "wallet", "deposit-address"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Merchant Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchant/wallet/balance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "merchant", "wallet", "balance"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check Merchant Deposit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchant/wallet/check-deposit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "merchant", "wallet", "check-deposit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Merchant Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchant/wallet/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "merchant", "wallet", "transactions"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Marketplace",
+      "description": "Telegram channel and group marketplace. Browse listings, submit channels for sale, and purchase existing listings.",
+      "item": [
+        {
+          "name": "List Channels for Sale",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/channels?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "channels"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Groups for Sale",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/groups?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "groups"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Listing Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/listings/LISTING_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "listings", "LISTING_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"channel\",\n  \"username\": \"mychannel\",\n  \"memberCount\": 5000,\n  \"averageViewCount\": 2500,\n  \"creationYear\": 2024,\n  \"description\": \"High engagement crypto channel\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/listings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "listings"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Withdraw Listing",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/listings/LISTING_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "listings", "LISTING_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Purchase Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/marketplace/purchase/LISTING_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "marketplace", "purchase", "LISTING_ID"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
