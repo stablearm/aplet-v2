@@ -1,14 +1,28 @@
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: aplet-nginx
+  aplet:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_URL: ""
+        NEXT_PUBLIC_TELEGRAM_BOT_USERNAME: ${NEXT_PUBLIC_TELEGRAM_BOT_USERNAME:-apletbot}
+    container_name: aplet
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./scripts/nginx-aplet.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./aplet_cert.pem:/etc/nginx/ssl/aplet_cert.pem:ro
-      - ./aplet_key.pem:/etc/nginx/ssl/aplet_key.pem:ro
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "6090:6090"
+    environment:
+      - NODE_ENV=production
+      - PORT=6090
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:6090/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
