@@ -14,7 +14,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
-import { clearTokens } from "@/lib/api-client";
+import { getRefreshToken } from "@/lib/api-client";
+import { authApi } from "@/lib/api";
 
 const mainItems = [
   { name: "پلتفرم‌ها", href: "/workspace/platforms", icon: Radio, description: "مدیریت کانال‌های تلگرام", color: "from-[#5B5FEF]/15 to-[#3B82F6]/15", iconColor: "text-[#5B5FEF]" },
@@ -36,8 +37,11 @@ const otherItems = [
 export default function MorePage() {
   const { user, logout } = useAuthStore();
 
-  const handleLogout = () => {
-    clearTokens();
+  const handleLogout = async () => {
+    const rt = getRefreshToken();
+    if (rt) {
+      try { await authApi.logout({ refreshToken: rt }); } catch { /* best-effort */ }
+    }
     logout();
     window.location.href = "/login";
   };

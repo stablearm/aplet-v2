@@ -4,6 +4,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
+let refreshPromise: Promise<boolean> | null = null;
 
 export function setTokens(tokens: AuthTokens) {
   accessToken = tokens.accessToken;
@@ -39,7 +40,7 @@ function getAccessToken(): string | null {
   return null;
 }
 
-function getRefreshToken(): string | null {
+export function getRefreshToken(): string | null {
   if (refreshToken) return refreshToken;
   if (typeof window !== "undefined") {
     refreshToken = localStorage.getItem("refreshToken");
@@ -48,7 +49,7 @@ function getRefreshToken(): string | null {
   return null;
 }
 
-async function refreshAccessToken(): Promise<boolean> {
+async function doRefresh(): Promise<boolean> {
   const currentRefreshToken = getRefreshToken();
   if (!currentRefreshToken) return false;
 
@@ -78,6 +79,16 @@ async function refreshAccessToken(): Promise<boolean> {
   }
 }
 
+async function refreshAccessToken(): Promise<boolean> {
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = doRefresh();
+  try {
+    return await refreshPromise;
+  } finally {
+    refreshPromise = null;
+  }
+}
+
 interface RequestOptions extends RequestInit {
   skipAuth?: boolean;
 }
@@ -90,6 +101,7 @@ export async function apiRequest<T>(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
     ...(fetchOptions.headers as Record<string, string> || {}),
   };
 
@@ -120,12 +132,11 @@ export async function apiRequest<T>(
   }
 
   if (!response.ok) {
-    const error: ApiError = await response.json().catch(() => ({
+    const raw = await response.json().catch(() => null);
+    throw {
       statusCode: response.status,
-      message: "An unexpected error occurred",
-      error: "Unknown Error",
-    }));
-    throw error;
+      message: raw?.message || "An unexpected error occurred",
+    } as ApiError;
   }
 
   if (response.status === 204) {

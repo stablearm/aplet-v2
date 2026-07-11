@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { User } from "@/types";
+import { clearTokens } from "@/lib/api-client";
 
 interface AuthState {
   user: User | null;
@@ -25,10 +26,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setLoading: (isLoading) => set({ isLoading }),
 
-  logout: () =>
+  logout: () => {
+    clearTokens();
     set({
       user: null,
       isAuthenticated: false,
       isLoading: false,
-    }),
+    });
+  },
 }));

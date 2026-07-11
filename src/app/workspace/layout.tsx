@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
@@ -12,24 +12,22 @@ import { useAuthStore } from "@/store/auth-store";
 
 function WorkspaceContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuthStore();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login");
+      const returnTo = encodeURIComponent(pathname);
+      router.replace(`/login?returnTo=${returnTo}`);
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, router, pathname]);
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    return null;
   }
 
   return (

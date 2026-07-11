@@ -7,6 +7,7 @@ import remarkBreaks from "remark-breaks";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeUnwrapImages from "rehype-unwrap-images";
+import rehypeSanitize from "rehype-sanitize";
 import type { ZodSchema } from "zod";
 import { blogSchema, guideSchema, glossarySchema, resourceSchema } from "@/content/schema";
 import type { BlogPost, Guide, GlossaryTerm, Resource } from "@/content/schema";
@@ -157,7 +158,7 @@ export async function compileMDXContent(source: string) {
     options: {
       mdxOptions: {
         remarkPlugins: [remarkGfm, remarkBreaks],
-        rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeUnwrapImages],
+        rehypePlugins: [rehypeSanitize, rehypeSlug, rehypeAutolinkHeadings, rehypeUnwrapImages],
       },
     },
   });

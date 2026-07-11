@@ -20,7 +20,8 @@ import {
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
 import { useAuthStore } from "@/store/auth-store";
-import { clearTokens } from "@/lib/api-client";
+import { getRefreshToken } from "@/lib/api-client";
+import { authApi } from "@/lib/api";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { ApletLogo, ApletSymbol } from "@/components/brand";
 
@@ -98,9 +99,12 @@ export function Sidebar() {
   const collapsed = sidebarCollapsed;
   const isDark = theme === "dark";
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const rt = getRefreshToken();
+    if (rt) {
+      try { await authApi.logout({ refreshToken: rt }); } catch { /* best-effort */ }
+    }
     useAuthStore.getState().logout();
-    clearTokens();
     window.location.href = "/login";
   };
 

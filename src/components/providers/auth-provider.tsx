@@ -9,6 +9,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setUser, setLoading } = useAuthStore();
 
   useEffect(() => {
+    setLoading(true);
     loadTokens();
     authApi
       .getProfile()

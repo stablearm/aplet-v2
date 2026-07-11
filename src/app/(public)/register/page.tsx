@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,11 +35,30 @@ const BOT_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "apletbot"
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
   const { setUser } = useAuthStore();
   const { initData, isMiniApp, isReady } = useTelegramWebApp();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isTelegramLoading, setIsTelegramLoading] = useState(false);
+
+  const getRedirectPath = () => {
+    if (returnTo) {
+      try {
+        const decoded = decodeURIComponent(returnTo);
+        if (
+          decoded.startsWith("/workspace") &&
+          !decoded.includes("..") &&
+          !decoded.includes("\0") &&
+          !decoded.includes("//")
+        ) {
+          return decoded;
+        }
+      } catch { /* invalid encoding, fall through */ }
+    }
+    return "/workspace/dashboard";
+  };
 
   const {
     register,
@@ -65,7 +84,7 @@ export default function RegisterPage() {
           refreshTokenExpires: response.refreshTokenExpires,
         });
         setUser(response.user);
-        router.push("/workspace/dashboard");
+        router.push(getRedirectPath());
       } catch (err) {
         const apiError = err as { message?: string };
         setError(apiError.message || "خطا در ثبت نام با تلگرام. لطفاً دوباره تلاش کنید.");
@@ -90,7 +109,7 @@ export default function RegisterPage() {
         refreshTokenExpires: response.refreshTokenExpires,
       });
       setUser(response.user);
-      router.push("/workspace/dashboard");
+      router.push(getRedirectPath());
     } catch (err) {
       const apiError = err as { message?: string };
       setError(apiError.message || "خطا در ثبت نام. لطفاً دوباره تلاش کنید.");

@@ -1,6 +1,4 @@
-export function generateStaticParams() {
-  return [{ id: "placeholder" }];
-}
+export const dynamic = "force-dynamic";
 
 export default function PublisherLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
