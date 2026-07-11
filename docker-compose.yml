@@ -1,0 +1,14 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: aplet-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./scripts/nginx-aplet.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./aplet_cert.pem:/etc/nginx/ssl/aplet_cert.pem:ro
+      - ./aplet_key.pem:/etc/nginx/ssl/aplet_key.pem:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
