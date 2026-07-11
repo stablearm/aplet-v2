@@ -35,3 +35,15 @@ Thumbs.db
 
 # agent config
 .mimocode/
+
+# SSL certificates
+*.pem
+*.key
+
+# logs
+*.log
+
+# temp files
+*.bak
+*.old
+count_words.ps1
