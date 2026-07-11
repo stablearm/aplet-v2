@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
+import { getAllBlogPosts, getAllGuides, getAllGlossaryTerms, getAllResources } from "@/lib/mdx";
 
-export const dynamic = "force-static";
-
-const SITE_URL = "https://aplet.pages.dev";
+const SITE_URL = "https://aplet.ir";
 
 const staticPages = [
   { url: SITE_URL, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 1.0 },
@@ -35,6 +34,15 @@ const telegramHubs = [
   "telegram-member-service",
 ];
 
+const toolPages = [
+  "tools/cpm-calculator",
+  "tools/roi-calculator",
+  "tools/engagement-calculator",
+  "tools/growth-calculator",
+  "tools/income-calculator",
+  "tools/post-frequency-calculator",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const hubPages = telegramHubs.map((slug) => ({
     url: `${SITE_URL}/${slug}/`,
@@ -43,5 +51,49 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...hubPages];
+  const toolPageUrls = toolPages.map((slug) => ({
+    url: `${SITE_URL}/${slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  // Dynamic content pages
+  const blogPosts = getAllBlogPosts().map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}/`,
+    lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(post.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  const guides = getAllGuides().map((guide) => ({
+    url: `${SITE_URL}/guides/${guide.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+  }));
+
+  const glossaryTerms = getAllGlossaryTerms().map((term) => ({
+    url: `${SITE_URL}/glossary/${term.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  const resources = getAllResources().map((resource) => ({
+    url: `${SITE_URL}/resources/${resource.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [
+    ...staticPages,
+    ...hubPages,
+    ...toolPageUrls,
+    ...blogPosts,
+    ...guides,
+    ...glossaryTerms,
+    ...resources,
+  ];
 }

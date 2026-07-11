@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Users, Bot, Megaphone, Zap, ArrowLeft, Star, ArrowUpRight,
   MessageSquare, Clock, Shield, ChevronDown, HelpCircle,
-  Send, BarChart3, Wallet, CheckCircle,
+  Send, BarChart3, Wallet, CheckCircle, BookOpen,
 } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { faqSchema, softwareApplicationSchema } from "@/lib/schemas";
+
+export const metadata: Metadata = {
+  title: "آپلت | سیستم عامل کسب و کار تلگرام",
+  description: "آپلت: سیستم عامل کسب و کار تلگرام. خرید عضو واقعی، بات هوشمند محتوا، مدیریت کانال، کمپین عضوگیری و درآمدزایی از تلگرام.",
+  keywords: ["تلگرام", "تبلیغات تلگرام", "بازاریابی تلگرام", "کسب درآمد از تلگرام", "مدیریت کانال تلگرام", "بات تلگرام", "عضوگیری تلگرام", "خرید عضو تلگرام"],
+};
 
 /* ── data ──────────────────────────────────────────────── */
 
@@ -69,6 +78,8 @@ const faqs = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={softwareApplicationSchema()} />
+      <JsonLd data={faqSchema(faqs.map((f) => ({ question: f.q, answer: f.a })))} />
       {/* ─── Hero ─────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
@@ -425,6 +436,48 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── Topic Hubs ──────────────────────────────── */}
+      <section className="py-16 md:py-20 lg:py-24 border-y border-border/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary mb-3 md:mb-4">
+              موضوعات <span className="bg-gradient-to-l from-primary to-accent bg-clip-text text-transparent">تلگرام</span>
+            </h2>
+            <p className="text-xs md:text-sm text-text-secondary max-w-lg mx-auto">
+              راهنماهای جامع برای هر موضوع مرتبط با تلگرام
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-w-5xl mx-auto">
+            {[
+              { title: "تبلیغات تلگرام", href: "/telegram-ads/", color: "from-[#5B5FEF] to-[#3B82F6]" },
+              { title: "بازاریابی تلگرام", href: "/telegram-marketing/", color: "from-[#3B82F6] to-[#06B6D4]" },
+              { title: "رشد کانال", href: "/telegram-growth/", color: "from-[#10B981] to-[#059669]" },
+              { title: "بات تلگرام", href: "/telegram-bot/", color: "from-[#F59E0B] to-[#D97706]" },
+              { title: "کانال تلگرام", href: "/telegram-channel/", color: "from-[#8B5CF6] to-[#6D28D9]" },
+              { title: "کسب درآمد", href: "/telegram-monetization/", color: "from-[#EF4444] to-[#DC2626]" },
+              { title: "تحلیل تلگرام", href: "/telegram-analytics/", color: "from-[#06B6D4] to-[#3B82F6]" },
+              { title: "اتوماسیون", href: "/telegram-automation/", color: "from-[#F59E0B] to-[#EF4444]" },
+            ].map((hub) => (
+              <Link
+                key={hub.title}
+                href={hub.href}
+                className="group rounded-xl md:rounded-2xl border border-border/40 bg-surface p-4 md:p-5 text-center shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+              >
+                <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${hub.color} text-white mb-3 group-hover:scale-110 transition-transform`}>
+                  <Megaphone className="h-5 w-5" />
+                </div>
+                <h3 className="text-xs md:text-sm font-bold text-text-primary group-hover:text-primary transition-colors">{hub.title}</h3>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link href="/guides/" className="text-xs md:text-sm text-primary font-semibold hover:underline">
+              مشاهده همه راهنماها ←
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── FAQ ──────────────────────────────────────── */}
       <section className="py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-4 max-w-3xl">
@@ -448,6 +501,39 @@ export default function HomePage() {
             <Link href="/faq" className="text-xs md:text-sm text-primary font-semibold hover:underline">
               مشاهده همه سوالات متداول ←
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Resources & Tools ───────────────────────── */}
+      <section className="py-16 md:py-20 lg:py-24 bg-surface-elevated/30 border-y border-border/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary mb-3 md:mb-4">
+              ابزارها و منابع <span className="bg-gradient-to-l from-primary to-accent bg-clip-text text-transparent">رایگان</span>
+            </h2>
+            <p className="text-xs md:text-sm text-text-secondary max-w-lg mx-auto">
+              ماشین حساب‌ها، واژه‌نامه و مقالات آموزشی رایگان
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-4xl mx-auto">
+            {[
+              { title: "ابزارهای تحلیلی", description: "ماشین حساب CPM، ROI، تعامل و رشد", href: "/tools/", icon: BarChart3 },
+              { title: "واژه‌نامه تلگرام", description: "۳۱ اصطلاح تخصصی تلگرام با توضیح کامل", href: "/glossary/", icon: BookOpen },
+              { title: "بلاگ آموزشی", description: "۲۷ مقاله جامع درباره تلگرام", href: "/blog/", icon: Megaphone },
+            ].map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="group rounded-xl md:rounded-2xl border border-white/[0.06] bg-[#0F1225] p-5 md:p-6 hover:border-primary/20 transition-all duration-300"
+              >
+                <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-primary mb-3 group-hover:scale-110 transition-transform">
+                  <item.icon className="h-4 w-4 md:h-5 md:w-5" />
+                </div>
+                <h3 className="text-sm md:text-base font-bold text-white mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                <p className="text-xs md:text-sm text-slate-400">{item.description}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

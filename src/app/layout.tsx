@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  metadataBase: new URL("https://aplet.pages.dev"),
+  metadataBase: new URL("https://aplet.ir"),
 };
 
 export default function RootLayout({

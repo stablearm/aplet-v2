@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Clock, Tag, ArrowRight, ArrowLeft, BookOpen, Calendar } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbSchema } from "@/lib/schemas";
 
 interface ArticleLayoutProps {
   title: string;
@@ -26,6 +28,14 @@ export function ArticleLayout({
 }: ArticleLayoutProps) {
   return (
     <>
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <JsonLd
+          data={breadcrumbSchema([
+            { name: "خانه", url: "/" },
+            ...breadcrumbs.map((b) => ({ name: b.label, url: b.href })),
+          ])}
+        />
+      )}
       {/* Hero Header */}
       <section className="relative overflow-hidden border-b border-border/30">
         <div className="absolute inset-0 pointer-events-none">

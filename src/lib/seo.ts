@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const SITE_URL = "https://aplet.pages.dev";
+const SITE_URL = "https://aplet.ir";
 const SITE_NAME = "آپلت";
 const DEFAULT_DESCRIPTION =
   "آپلت: سیستم عامل کسب و کار تلگرام. مدیریت کانال، کمپین عضوگیری، درآمدزایی و تبلیغات.";

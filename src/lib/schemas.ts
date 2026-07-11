@@ -9,7 +9,9 @@ export function organizationSchema() {
     logo: `${SITE_URL}/brand/aplet-logo-light.svg`,
     description:
       "آپلت: سیستم عامل کسب و کار تلگرام. مدیریت کانال، کمپین عضوگیری، درآمدزایی و تبلیغات.",
-    sameAs: [],
+    sameAs: [
+      "https://apletbot.com",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
