@@ -25,33 +25,45 @@ const stepsMeta = [
 
 function Stepper({ current }: { current: number }) {
   return (
-    <div className="flex items-start justify-between mb-10 px-2" dir="rtl">
+    <div className="relative flex items-start justify-between mb-10 px-4 md:px-8" dir="rtl">
+      {/* Background connector lines */}
       {stepsMeta.map((s, i) => {
+        if (i === stepsMeta.length - 1) return null;
+        const done = s.id < current;
+        return (
+          <div
+            key={`line-${s.id}`}
+            className={`absolute top-5 md:top-6 h-[2px] ${
+              done ? "bg-emerald-500" : "bg-gray-200 dark:bg-white/[0.06]"
+            }`}
+            style={{
+              right: `calc(${(i * 100) / (stepsMeta.length - 1)}% + 20px)`,
+              width: `calc(${100 / (stepsMeta.length - 1)}% - 40px)`,
+            }}
+          />
+        );
+      })}
+
+      {/* Step circles and labels */}
+      {stepsMeta.map((s) => {
         const active = s.id === current;
         const done = s.id < current;
         const Icon = s.icon;
         return (
-          <div key={s.id} className="flex items-center flex-1 last:flex-none">
-            <div className="flex flex-col items-center gap-2 flex-1">
-              <div className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
-                done
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                  : active
-                    ? "bg-primary text-white shadow-lg shadow-primary/30"
-                    : "bg-gray-100 text-gray-300 dark:bg-white/[0.06] dark:text-white/15"
-              }`}>
-                {done ? <Check className="h-5 w-5" /> : <Icon className="h-4 w-4 md:h-5 md:w-5" />}
-                {active && <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping" />}
-              </div>
-              <span className={`text-[10px] md:text-[11px] font-bold text-center whitespace-nowrap transition-colors ${
-                active ? "text-primary" : done ? "text-emerald-500" : "text-gray-300 dark:text-white/15"
-              }`}>{s.label}</span>
+          <div key={s.id} className="flex flex-col items-center gap-2 relative z-10">
+            <div className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+              done
+                ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+                : active
+                  ? "bg-primary text-white shadow-lg shadow-primary/30"
+                  : "bg-gray-100 text-gray-300 dark:bg-white/[0.06] dark:text-white/15"
+            }`}>
+              {done ? <Check className="h-5 w-5" /> : <Icon className="h-4 w-4 md:h-5 md:w-5" />}
+              {active && <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping" />}
             </div>
-            {i < stepsMeta.length - 1 && (
-              <div className={`w-6 md:w-12 h-[2px] rounded-full mt-[-20px] mx-0.5 shrink-0 ${
-                done ? "bg-emerald-500" : "bg-gray-200 dark:bg-white/[0.06]"
-              }`} />
-            )}
+            <span className={`text-[10px] md:text-[11px] font-bold text-center leading-tight transition-colors ${
+              active ? "text-primary" : done ? "text-emerald-500" : "text-gray-300 dark:text-white/15"
+            }`}>{s.label}</span>
           </div>
         );
       })}
