@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { ApletLogo } from "@/components/brand";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuthStore } from "@/store/auth-store";
 import { authApi } from "@/lib/api";
 import { getRefreshToken } from "@/lib/api-client";
@@ -81,8 +82,9 @@ export function PublicHeader() {
           ))}
         </nav>
 
-        {/* Left: Auth buttons or Profile */}
+        {/* Left: Theme toggle + Auth buttons or Profile */}
         <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle className="h-9 w-9 rounded-xl" />
           {isLoading ? (
             <div className="h-10 w-10 rounded-full bg-surface-elevated animate-pulse" />
           ) : isAuthenticated && user ? (
@@ -172,6 +174,11 @@ export function PublicHeader() {
               </Link>
             ))}
 
+            <div className="border-t border-border/30 my-2" />
+            <div className="flex items-center justify-between px-3 py-2">
+              <span className="text-sm text-text-secondary">قالب سایت</span>
+              <ThemeToggle size="sm" className="h-8 w-8 rounded-lg" />
+            </div>
             <div className="border-t border-border/30 my-2" />
             {isAuthenticated && user ? (
               <>

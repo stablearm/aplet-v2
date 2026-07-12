@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Search, Plus, User, Sun, Moon, ChevronRight } from "lucide-react";
+import { Bell, Search, Plus, User, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth-store";
-import { useUIStore } from "@/store/ui-store";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,12 +63,10 @@ function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
-  // Skip "workspace" from display
   const displaySegments = segments.filter((s) => s !== "workspace");
 
   if (displaySegments.length === 0) return null;
 
-  // Check if a segment looks like a MongoDB ObjectId (24 hex chars)
   const isIdSegment = (s: string) => /^[0-9a-f]{24}$/i.test(s);
 
   return (
@@ -103,22 +101,17 @@ function Breadcrumbs() {
 
 export function Header() {
   const { user } = useAuthStore();
-  const { theme, setTheme } = useUIStore();
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#CBD5E1]/50 bg-white/80 backdrop-blur-xl px-4 md:px-6 lg:px-8 dark:border-border/50 dark:bg-background/80" dir="rtl">
-      {/* Right: Breadcrumbs (RTL = right side) */}
+      {/* Right: Breadcrumbs */}
       <div className="flex items-center gap-3">
         <Breadcrumbs />
       </div>
 
-      {/* Left: Actions (RTL = left side) */}
+      {/* Left: Actions */}
       <div className="flex items-center gap-2">
-        {/* Command Palette Trigger - Hidden on mobile */}
+        {/* Search */}
         <button className="hidden md:flex items-center gap-2.5 rounded-xl border border-[#CBD5E1]/60 bg-[#F1F5F9]/40 px-3.5 py-2 text-xs text-text-tertiary hover:bg-[#F1F5F9] hover:text-text-secondary hover:border-[#5B5FEF]/30 transition-all duration-200 dark:border-border/60 dark:bg-muted/40 dark:hover:bg-muted">
           <Search className="h-3.5 w-3.5" />
           <span>جستجو...</span>
@@ -130,9 +123,7 @@ export function Header() {
         <Separator orientation="vertical" className="mx-1 h-5 bg-border/50 hidden md:block" />
 
         {/* Theme Toggle */}
-        <Button size="icon" variant="ghost" onClick={toggleTheme} className="h-9 w-9 rounded-xl">
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </Button>
+        <ThemeToggle />
 
         {/* Quick Create */}
         <DropdownMenu>
@@ -158,11 +149,13 @@ export function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Notifications */}
-        <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-2 left-2 h-2 w-2 rounded-full bg-danger pulse-notification" />
-        </Button>
+        {/* Notifications — now a link */}
+        <Link href="/workspace/notifications">
+          <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl relative">
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-2 left-2 h-2 w-2 rounded-full bg-danger pulse-notification" />
+          </Button>
+        </Link>
 
         {/* User Menu */}
         <DropdownMenu>
