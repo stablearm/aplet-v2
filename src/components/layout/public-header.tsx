@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { ApletLogo } from "@/components/brand";
+import { useAuthStore } from "@/store/auth-store";
+import { authApi } from "@/lib/api";
 
 const mainNav = [
   { href: "/features", label: "امکانات" },
@@ -13,14 +16,40 @@ const mainNav = [
 ];
 
 export function PublicHeader() {
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { user, isAuthenticated, isLoading, logout } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    if (!profileOpen) return;
+    const handleClick = () => setProfileOpen(false);
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [profileOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Ignore API errors — clear local state anyway
+    }
+    logout();
+    setProfileOpen(false);
+    router.push("/");
+  };
+
+  const userInitials = user
+    ? (user.firstName?.[0] || user.email?.[0] || "?").toUpperCase()
+    : "?";
 
   return (
     <header
@@ -50,22 +79,70 @@ export function PublicHeader() {
           ))}
         </nav>
 
-        {/* Left: Auth buttons */}
+        {/* Left: Auth buttons or Profile */}
         <div className="hidden lg:flex items-center gap-3">
-          <Link
-            href="/login"
-            prefetch={true}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-primary hover:bg-primary/5 transition-all duration-200"
-          >
-            ورود
-          </Link>
-          <Link
-            href="/register"
-            prefetch={true}
-            className="inline-flex h-10 items-center justify-center rounded-xl bg-gradient-to-l from-primary to-accent px-6 text-sm font-bold text-white shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] transition-all duration-200"
-          >
-            شروع رایگان
-          </Link>
+          {isLoading ? (
+            <div className="h-10 w-10 rounded-full bg-surface-elevated animate-pulse" />
+          ) : isAuthenticated && user ? (
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProfileOpen(!profileOpen);
+                }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-surface-elevated transition-colors"
+              >
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-xs font-bold text-white">
+                  {userInitials}
+                </div>
+                <span className="text-sm font-medium text-text-primary max-w-[120px] truncate">
+                  {user.firstName || user.email?.split("@")[0] || "کاربر"}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-text-tertiary transition-transform ${profileOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {profileOpen && (
+                <div className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-border/50 bg-surface shadow-xl py-1 z-50">
+                  <div className="px-4 py-3 border-b border-border/30">
+                    <p className="text-sm font-medium text-text-primary truncate">{user.firstName} {user.lastName}</p>
+                    <p className="text-xs text-text-tertiary truncate mt-0.5">{user.email}</p>
+                  </div>
+                  <Link
+                    href="/workspace/dashboard"
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface-elevated hover:text-primary transition-colors"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    پنل کاربری
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-danger hover:bg-danger/5 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    خروج
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                prefetch={true}
+                className="px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-primary hover:bg-primary/5 transition-all duration-200"
+              >
+                ورود
+              </Link>
+              <Link
+                href="/register"
+                prefetch={true}
+                className="inline-flex h-10 items-center justify-center rounded-xl bg-gradient-to-l from-primary to-accent px-6 text-sm font-bold text-white shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] transition-all duration-200"
+              >
+                شروع رایگان
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -94,20 +171,51 @@ export function PublicHeader() {
             ))}
 
             <div className="border-t border-border/30 my-2" />
-            <Link
-              href="/login"
-              className="flex items-center px-3 py-2.5 rounded-xl text-sm text-text-secondary hover:bg-surface-elevated hover:text-primary transition-colors"
-              onClick={() => setMobileOpen(false)}
-            >
-              ورود
-            </Link>
-            <Link
-              href="/register"
-              className="flex items-center justify-center rounded-xl bg-gradient-to-l from-primary to-accent px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary/25 mt-2"
-              onClick={() => setMobileOpen(false)}
-            >
-              شروع رایگان
-            </Link>
+            {isAuthenticated && user ? (
+              <>
+                <div className="flex items-center gap-3 px-3 py-2.5">
+                  <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm font-bold text-white">
+                    {userInitials}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-text-primary truncate">{user.firstName || "کاربر"}</p>
+                    <p className="text-xs text-text-tertiary truncate">{user.email}</p>
+                  </div>
+                </div>
+                <Link
+                  href="/workspace/dashboard"
+                  className="flex items-center px-3 py-2.5 rounded-xl text-sm text-text-secondary hover:bg-surface-elevated hover:text-primary transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <LayoutDashboard className="h-4 w-4 ml-2" />
+                  پنل کاربری
+                </Link>
+                <button
+                  onClick={() => { handleLogout(); setMobileOpen(false); }}
+                  className="flex items-center px-3 py-2.5 rounded-xl text-sm text-danger hover:bg-danger/5 transition-colors"
+                >
+                  <LogOut className="h-4 w-4 ml-2" />
+                  خروج
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="flex items-center px-3 py-2.5 rounded-xl text-sm text-text-secondary hover:bg-surface-elevated hover:text-primary transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  ورود
+                </Link>
+                <Link
+                  href="/register"
+                  className="flex items-center justify-center rounded-xl bg-gradient-to-l from-primary to-accent px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary/25 mt-2"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  شروع رایگان
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       )}

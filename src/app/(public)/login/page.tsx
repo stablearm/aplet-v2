@@ -29,7 +29,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo");
-  const { setUser } = useAuthStore();
+  const { setUser, isAuthenticated, isLoading } = useAuthStore();
   const { initData, isMiniApp, isReady } = useTelegramWebApp();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +59,13 @@ function LoginContent() {
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.replace("/workspace/dashboard");
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   // Auto-login when inside Telegram Mini App
   useEffect(() => {

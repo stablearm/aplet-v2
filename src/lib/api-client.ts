@@ -4,23 +4,33 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
+let accessTokenExpiresAt: number | null = null;
+let refreshTokenExpiresAt: number | null = null;
 let refreshPromise: Promise<boolean> | null = null;
 
 export function setTokens(tokens: AuthTokens) {
   accessToken = tokens.accessToken;
   refreshToken = tokens.refreshToken;
+  accessTokenExpiresAt = parseExpiry(tokens.accessTokenExpires);
+  refreshTokenExpiresAt = parseExpiry(tokens.refreshTokenExpires);
   if (typeof window !== "undefined") {
     localStorage.setItem("accessToken", tokens.accessToken);
     localStorage.setItem("refreshToken", tokens.refreshToken);
+    if (accessTokenExpiresAt) localStorage.setItem("accessTokenExpiresAt", String(accessTokenExpiresAt));
+    if (refreshTokenExpiresAt) localStorage.setItem("refreshTokenExpiresAt", String(refreshTokenExpiresAt));
   }
 }
 
 export function clearTokens() {
   accessToken = null;
   refreshToken = null;
+  accessTokenExpiresAt = null;
+  refreshTokenExpiresAt = null;
   if (typeof window !== "undefined") {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessTokenExpiresAt");
+    localStorage.removeItem("refreshTokenExpiresAt");
   }
 }
 
@@ -28,7 +38,21 @@ export function loadTokens() {
   if (typeof window !== "undefined") {
     accessToken = localStorage.getItem("accessToken");
     refreshToken = localStorage.getItem("refreshToken");
+    const aexp = localStorage.getItem("accessTokenExpiresAt");
+    const rexp = localStorage.getItem("refreshTokenExpiresAt");
+    accessTokenExpiresAt = aexp ? Number(aexp) : null;
+    refreshTokenExpiresAt = rexp ? Number(rexp) : null;
   }
+}
+
+export function isAccessTokenExpired(): boolean {
+  if (!accessTokenExpiresAt) return false;
+  return Date.now() >= accessTokenExpiresAt - 30_000;
+}
+
+export function isRefreshTokenExpired(): boolean {
+  if (!refreshTokenExpiresAt) return false;
+  return Date.now() >= refreshTokenExpiresAt;
 }
 
 function getAccessToken(): string | null {
@@ -49,7 +73,18 @@ export function getRefreshToken(): string | null {
   return null;
 }
 
+function parseExpiry(value: string | undefined): number | null {
+  if (!value) return null;
+  const ts = Date.parse(value);
+  return isNaN(ts) ? null : ts;
+}
+
 async function doRefresh(): Promise<boolean> {
+  if (isRefreshTokenExpired()) {
+    clearTokens();
+    return false;
+  }
+
   const currentRefreshToken = getRefreshToken();
   if (!currentRefreshToken) return false;
 
@@ -106,6 +141,11 @@ export async function apiRequest<T>(
   };
 
   if (!skipAuth) {
+    // Proactively refresh if access token is about to expire
+    if (isAccessTokenExpired()) {
+      await refreshAccessToken();
+    }
+
     const token = getAccessToken();
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
