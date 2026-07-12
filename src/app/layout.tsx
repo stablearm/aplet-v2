@@ -63,9 +63,10 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className="dark" suppressHydrationWarning>
       <head>
+        <meta name="color-scheme" content="dark" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=JSON.parse(localStorage.getItem('theme')||'"dark"');if(t==='system')t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.className=t==='dark'?'dark':'light';}catch(e){document.documentElement.className='dark';}})()`,
+            __html: `(function(){try{var t=JSON.parse(localStorage.getItem('theme')||'"dark"');if(t==='system')t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.className=t+' dark';document.documentElement.style.colorScheme='dark';}catch(e){document.documentElement.className='dark';document.documentElement.style.colorScheme='dark';}})()`,
           }}
         />
         {/* Font optimization: preconnect + display=swap for FOIT prevention */}
