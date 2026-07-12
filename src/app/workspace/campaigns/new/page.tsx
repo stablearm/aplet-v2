@@ -25,30 +25,30 @@ const stepsMeta = [
 
 function Stepper({ current }: { current: number }) {
   return (
-    <div className="flex items-center justify-center mb-10" dir="rtl">
+    <div className="flex items-start justify-between mb-10 px-2" dir="rtl">
       {stepsMeta.map((s, i) => {
         const active = s.id === current;
         const done = s.id < current;
         const Icon = s.icon;
         return (
-          <div key={s.id} className="flex items-center">
-            <div className="flex flex-col items-center gap-2 min-w-[72px]">
-              <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+          <div key={s.id} className="flex items-center flex-1 last:flex-none">
+            <div className="flex flex-col items-center gap-2 flex-1">
+              <div className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
                 done
                   ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
                   : active
                     ? "bg-primary text-white shadow-lg shadow-primary/30"
-                    : "bg-gray-100 text-gray-400 dark:bg-white/[0.06] dark:text-white/20"
+                    : "bg-gray-100 text-gray-300 dark:bg-white/[0.06] dark:text-white/15"
               }`}>
-                {done ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
+                {done ? <Check className="h-5 w-5" /> : <Icon className="h-4 w-4 md:h-5 md:w-5" />}
                 {active && <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping" />}
               </div>
-              <span className={`text-[11px] font-bold transition-colors ${
-                active ? "text-primary" : done ? "text-emerald-500" : "text-gray-400 dark:text-white/20"
+              <span className={`text-[10px] md:text-[11px] font-bold text-center whitespace-nowrap transition-colors ${
+                active ? "text-primary" : done ? "text-emerald-500" : "text-gray-300 dark:text-white/15"
               }`}>{s.label}</span>
             </div>
             {i < stepsMeta.length - 1 && (
-              <div className={`w-8 md:w-14 h-[2px] rounded-full mb-6 mx-1 ${
+              <div className={`w-6 md:w-12 h-[2px] rounded-full mt-[-20px] mx-0.5 shrink-0 ${
                 done ? "bg-emerald-500" : "bg-gray-200 dark:bg-white/[0.06]"
               }`} />
             )}
@@ -219,20 +219,20 @@ export default function CreateCampaignPage() {
 
           <div>
             <label className="text-xs font-bold text-text-secondary block mb-2">نام کانال</label>
-            <div className="flex items-center rounded-xl border border-border/50 bg-background focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10 transition-all duration-200">
-              <span className="text-sm font-bold text-text-tertiary pr-4 pl-1.5">@</span>
+            <div dir="ltr" className="flex items-center rounded-xl border border-border/50 bg-background focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10 transition-all duration-200">
+              <span className="text-sm font-bold text-text-tertiary pl-1.5 pr-4">@</span>
               <input
                 type="text"
                 value={channel}
                 onChange={(e) => setChannel(e.target.value.replace(/^@/, "").replace(/[^a-zA-Z0-9_]/g, ""))}
                 placeholder="mychannel"
                 dir="ltr"
-                className="flex-1 h-12 bg-transparent text-sm font-medium text-text-primary placeholder:text-text-tertiary outline-none"
+                className="flex-1 h-12 bg-transparent text-sm font-medium text-text-primary placeholder:text-text-tertiary outline-none text-left"
               />
             </div>
             {channel && (
-              <p className="mt-2 text-xs text-text-secondary">
-                آدرس کانال: t.me/<span className="font-bold text-primary">{channel}</span>
+              <p dir="ltr" className="mt-2 text-xs text-text-secondary text-left">
+                t.me/<span className="font-bold text-primary">{channel}</span>
               </p>
             )}
           </div>

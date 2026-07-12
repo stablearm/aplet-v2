@@ -107,6 +107,7 @@ export function HeroOrderCard() {
             کانال مقصد
           </label>
           <div
+            dir="ltr"
             className={`flex items-center rounded-xl transition-all duration-300 overflow-hidden ${
               channelFocused
                 ? isDark
