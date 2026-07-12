@@ -112,7 +112,7 @@ export function Sidebar() {
     <TooltipProvider>
       <aside
         className={cn(
-          "fixed inset-y-0 right-0 z-40 hidden md:flex flex-col border-l border-[#CBD5E1]/50 bg-gradient-to-b from-white via-white to-[#F8FAFC] backdrop-blur-2xl transition-all duration-300 ease-in-out dark:border-border/40 dark:from-surface-elevated/80 dark:via-surface-elevated/80 dark:to-surface-elevated/80",
+          "fixed inset-y-0 right-0 z-40 hidden md:flex flex-col border-l border-border/40 bg-surface-elevated/80 backdrop-blur-2xl transition-all duration-300 ease-in-out",
           collapsed ? "w-[72px]" : "w-[260px]"
         )}
         dir="rtl"

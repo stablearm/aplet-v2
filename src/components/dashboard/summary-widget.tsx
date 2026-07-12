@@ -21,7 +21,7 @@ interface SummaryWidgetProps {
 export function SummaryWidget({ title, items, action, className }: SummaryWidgetProps) {
   return (
     <div className={cn(
-      "group relative rounded-2xl border border-border/40 bg-gradient-to-br from-white via-white to-[#F8FAFC] p-4 sm:p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-[#5B5FEF]/15 overflow-hidden dark:from-surface dark:via-surface dark:to-surface-elevated",
+      "group relative rounded-2xl border border-border/40 bg-surface p-4 sm:p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-[#5B5FEF]/15 overflow-hidden",
       className
     )}>
       <div className="relative">

@@ -34,7 +34,7 @@ export function KPIWidget({ label, value, unit, icon: Icon, trend, loading, clas
 
   return (
     <div className={cn(
-      "group relative overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br from-white via-white to-[#F8FAFC] p-4 sm:p-5 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#5B5FEF]/[0.08] hover:border-[#5B5FEF]/25 hover:-translate-y-1 dark:from-surface dark:via-surface dark:to-surface-elevated",
+      "group relative overflow-hidden rounded-2xl border border-border/40 bg-surface p-4 sm:p-5 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#5B5FEF]/[0.08] hover:border-[#5B5FEF]/25 hover:-translate-y-1",
       className
     )}>
       {/* Decorative gradient orb */}

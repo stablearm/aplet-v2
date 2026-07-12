@@ -11,7 +11,7 @@ interface ChartCardProps {
 export function ChartCard({ title, subtitle, action, children, className }: ChartCardProps) {
   return (
     <div className={cn(
-      "group relative rounded-2xl border border-border/40 bg-gradient-to-br from-white via-white to-[#F8FAFC] p-5 sm:p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-[#5B5FEF]/15 overflow-hidden dark:from-surface dark:via-surface dark:to-surface-elevated",
+      "group relative rounded-2xl border border-border/40 bg-surface p-5 sm:p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-[#5B5FEF]/15 overflow-hidden",
       className
     )}>
       <div className="relative">
