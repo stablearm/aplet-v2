@@ -36,8 +36,7 @@ Thumbs.db
 # agent config
 .mimocode/
 
-# SSL certificates
-*.pem
+# private keys only (certs are committed)
 *.key
 
 # logs

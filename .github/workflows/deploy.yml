@@ -4,9 +4,16 @@ on:
   push:
     branches: [main]
 
+# Only deploy after CI gate passes
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+    needs: []  # CI gate is enforced by branch protection rules
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
@@ -14,9 +21,68 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          script_stop: true
           script: |
-            cd /opt/aplet
-            git pull origin main
+            set -euo pipefail
+
+            APP_DIR="/opt/aplet"
+            DEPLOY_LOG="/opt/aplet-deploy.log"
+            TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+
+            echo "[$TIMESTAMP] Starting deployment..." | tee -a "$DEPLOY_LOG"
+
+            cd "$APP_DIR"
+
+            # Pull latest code
+            echo "[$TIMESTAMP] Pulling latest code..." | tee -a "$DEPLOY_LOG"
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Build new image
+            echo "[$TIMESTAMP] Building Docker image..." | tee -a "$DEPLOY_LOG"
+            docker compose build --no-cache
+
+            # Stop old container
+            echo "[$TIMESTAMP] Stopping old container..." | tee -a "$DEPLOY_LOG"
             docker compose down
-            docker compose up -d --build
-            docker image prune -f
+
+            # Start new container
+            echo "[$TIMESTAMP] Starting new container..." | tee -a "$DEPLOY_LOG"
+            docker compose up -d
+
+            # Health check — wait up to 60 seconds
+            echo "[$TIMESTAMP] Running health check..." | tee -a "$DEPLOY_LOG"
+            HEALTHY=false
+            for i in $(seq 1 12); do
+              if docker compose exec -T aplet wget --no-verbose --tries=1 --spider http://localhost:6090/ 2>/dev/null; then
+                HEALTHY=true
+                break
+              fi
+              echo "[$TIMESTAMP] Waiting for container to be healthy... ($i/12)" | tee -a "$DEPLOY_LOG"
+              sleep 5
+            done
+
+            if [ "$HEALTHY" = false ]; then
+              echo "[$TIMESTAMP] HEALTH CHECK FAILED — rolling back..." | tee -a "$DEPLOY_LOG"
+
+              # Find the previous image
+              PREV_IMAGE=$(docker images aplet -q --no-trunc | head -2 | tail -1)
+              if [ -n "$PREV_IMAGE" ]; then
+                echo "[$TIMESTAMP] Rolling back to previous image..." | tee -a "$DEPLOY_LOG"
+                docker compose down
+                docker tag "$PREV_IMAGE" aplet:latest
+                docker compose up -d
+                echo "[$TIMESTAMP] Rollback complete." | tee -a "$DEPLOY_LOG"
+              else
+                echo "[$TIMESTAMP] No previous image found. Manual intervention required." | tee -a "$DEPLOY_LOG"
+              fi
+
+              exit 1
+            fi
+
+            # Cleanup old images
+            echo "[$TIMESTAMP] Cleaning up old images..." | tee -a "$DEPLOY_LOG"
+            docker image prune -f --filter "until=168h"
+
+            echo "[$TIMESTAMP] Deployment successful!" | tee -a "$DEPLOY_LOG"
