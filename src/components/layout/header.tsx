@@ -103,7 +103,7 @@ export function Header() {
   const { user } = useAuthStore();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#CBD5E1]/50 bg-white/80 backdrop-blur-xl px-4 md:px-6 lg:px-8 dark:border-border/50 dark:bg-background/80" dir="rtl">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/50 bg-surface/80 backdrop-blur-xl px-4 md:px-6 lg:px-8" dir="rtl">
       {/* Right: Breadcrumbs */}
       <div className="flex items-center gap-3">
         <Breadcrumbs />
@@ -112,10 +112,10 @@ export function Header() {
       {/* Left: Actions */}
       <div className="flex items-center gap-2">
         {/* Search */}
-        <button className="hidden md:flex items-center gap-2.5 rounded-xl border border-[#CBD5E1]/60 bg-[#F1F5F9]/40 px-3.5 py-2 text-xs text-text-tertiary hover:bg-[#F1F5F9] hover:text-text-secondary hover:border-[#5B5FEF]/30 transition-all duration-200 dark:border-border/60 dark:bg-muted/40 dark:hover:bg-muted">
+        <button className="hidden md:flex items-center gap-2.5 rounded-xl border border-border/60 bg-muted/40 px-3.5 py-2 text-xs text-text-tertiary hover:bg-muted hover:text-text-secondary hover:border-[#5B5FEF]/30 transition-all duration-200">
           <Search className="h-3.5 w-3.5" />
           <span>جستجو...</span>
-          <kbd className="pointer-events-none ml-2 inline-flex h-5 select-none items-center gap-1 rounded-md border border-[#CBD5E1]/60 bg-white px-1.5 font-mono text-[10px] font-medium text-text-tertiary dark:border-border/60 dark:bg-surface">
+          <kbd className="pointer-events-none ml-2 inline-flex h-5 select-none items-center gap-1 rounded-md border border-border/60 bg-surface px-1.5 font-mono text-[10px] font-medium text-text-tertiary">
             <span className="text-[9px]">⌘</span>K
           </kbd>
         </button>

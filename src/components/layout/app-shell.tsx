@@ -14,7 +14,7 @@ export function AppShell({ children }: AppShellProps) {
   const { sidebarCollapsed } = useUIStore();
 
   return (
-    <div className="min-h-screen bg-[#F1F5F9] dark:bg-background" dir="rtl">
+    <div className="min-h-screen bg-background" dir="rtl">
       <Sidebar />
       <div
         className={cn(
