@@ -32,7 +32,7 @@ function LoginContent() {
   const { setUser, isAuthenticated, isLoading } = useAuthStore();
   const { initData, isMiniApp, isReady } = useTelegramWebApp();
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTelegramLoading, setIsTelegramLoading] = useState(false);
 
   const getRedirectPath = () => {
@@ -96,7 +96,7 @@ function LoginContent() {
 
   const onSubmit = async (data: LoginForm) => {
     setError(null);
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const response = await authApi.login(data);
@@ -112,7 +112,7 @@ function LoginContent() {
       const apiError = err as { message?: string };
       setError(apiError.message || "خطا در ورود. لطفاً دوباره تلاش کنید.");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -198,8 +198,8 @@ function LoginContent() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "در حال ورود..." : "ورود"}
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "در حال ورود..." : "ورود"}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">

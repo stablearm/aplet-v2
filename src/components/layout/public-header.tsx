@@ -7,6 +7,7 @@ import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { ApletLogo } from "@/components/brand";
 import { useAuthStore } from "@/store/auth-store";
 import { authApi } from "@/lib/api";
+import { getRefreshToken } from "@/lib/api-client";
 
 const mainNav = [
   { href: "/features", label: "امکانات" },
@@ -37,8 +38,9 @@ export function PublicHeader() {
   }, [profileOpen]);
 
   const handleLogout = async () => {
+    const token = getRefreshToken();
     try {
-      await authApi.logout();
+      if (token) await authApi.logout({ refreshToken: token });
     } catch {
       // Ignore API errors — clear local state anyway
     }

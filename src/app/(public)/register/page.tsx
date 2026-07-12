@@ -40,7 +40,7 @@ function RegisterContent() {
   const { setUser, isAuthenticated, isLoading } = useAuthStore();
   const { initData, isMiniApp, isReady } = useTelegramWebApp();
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTelegramLoading, setIsTelegramLoading] = useState(false);
 
   const getRedirectPath = () => {
@@ -104,7 +104,7 @@ function RegisterContent() {
 
   const onSubmit = async (data: RegisterForm) => {
     setError(null);
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       const { confirmPassword, ...submitData } = data;
@@ -121,7 +121,7 @@ function RegisterContent() {
       const apiError = err as { message?: string };
       setError(apiError.message || "خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -232,8 +232,8 @@ function RegisterContent() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "در حال ثبت نام..." : "ثبت نام"}
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "در حال ثبت نام..." : "ثبت نام"}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
