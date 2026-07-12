@@ -46,3 +46,4 @@ Thumbs.db
 *.bak
 *.old
 count_words.ps1
+db_query*.py
