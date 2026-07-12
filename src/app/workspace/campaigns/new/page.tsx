@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateCampaign, useCampaignPricing } from "@/features/campaigns/hooks/use-campaigns";
@@ -15,6 +15,7 @@ import { useProfile } from "@/features/settings/hooks/use-settings";
 
 export default function CreateCampaignPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const createMutation = useCreateCampaign();
   const { data: pricing } = useCampaignPricing();
   const { data: profile, isLoading: profileLoading } = useProfile();
@@ -24,6 +25,7 @@ export default function CreateCampaignPage() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<CreateCampaignForm>({
     resolver: zodResolver(createCampaignSchema),
@@ -31,6 +33,17 @@ export default function CreateCampaignPage() {
       targetSubscriberCount: 5000,
     },
   });
+
+  // Pre-fill from URL query params (from hero order card)
+  useEffect(() => {
+    const ch = searchParams.get("channel");
+    const members = searchParams.get("members");
+    if (ch) setValue("channelUsername", ch);
+    if (members) {
+      const n = parseInt(members, 10);
+      if (!isNaN(n)) setValue("targetSubscriberCount", n);
+    }
+  }, [searchParams, setValue]);
 
   const targetCount = watch("targetSubscriberCount");
   const totalCost = targetCount * (pricing?.totalPerMember || 500);
