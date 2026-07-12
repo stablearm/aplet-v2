@@ -61,8 +61,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning>
+    <html lang="fa" dir="rtl" className="dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=JSON.parse(localStorage.getItem('theme')||'"dark"');if(t==='system')t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.className=t==='dark'?'dark':'light';}catch(e){document.documentElement.className='dark';}})()`,
+          }}
+        />
         {/* Font optimization: preconnect + display=swap for FOIT prevention */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

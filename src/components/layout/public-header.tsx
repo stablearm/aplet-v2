@@ -150,13 +150,16 @@ export function PublicHeader() {
         </div>
 
         {/* Mobile menu button */}
-        <button
-          className="lg:hidden flex items-center justify-center h-9 w-9 rounded-xl hover:bg-surface-elevated transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "بستن منو" : "باز کردن منو"}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          <ThemeToggle className="h-9 w-9 rounded-xl" />
+          <button
+            className="flex items-center justify-center h-9 w-9 rounded-xl hover:bg-surface-elevated transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "بستن منو" : "باز کردن منو"}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile nav */}

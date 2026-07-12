@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Search, Plus, User, ChevronRight } from "lucide-react";
+import { Bell, Search, Plus, User, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth-store";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -84,7 +84,7 @@ function Breadcrumbs() {
 
         return (
           <span key={index} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-text-tertiary" />
+            <ChevronLeft className="h-3.5 w-3.5 text-text-tertiary" />
             {isLast ? (
               <span className="text-text-primary font-semibold">{label}</span>
             ) : (

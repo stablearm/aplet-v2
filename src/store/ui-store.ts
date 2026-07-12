@@ -53,7 +53,7 @@ function saveToStorage(key: string, value: unknown) {
 
 export const useUIStore = create<UIState>((set) => ({
   sidebarCollapsed: loadFromStorage("sidebar-collapsed", false),
-  theme: loadFromStorage("theme", "light" as const),
+  theme: loadFromStorage("theme", "dark" as const),
   density: loadFromStorage("density", "comfortable" as const),
   locale: "fa",
 
