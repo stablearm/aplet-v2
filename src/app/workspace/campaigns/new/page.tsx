@@ -318,9 +318,9 @@ export default function CreateCampaignPage() {
                       <span className="text-sm font-extrabold text-primary">۲</span>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-text-primary mb-1.5">دسترسی‌های لازم را فعال کنید</p>
+                      <p className="text-sm font-bold text-text-primary mb-1.5">دسترسی کامل به بات بدهید</p>
                       <p className="text-xs text-text-secondary leading-relaxed">
-                        هنگام اضافه کردن بات، گزینه <span className="font-bold">«مدیریت پیام‌ها»</span> را فعال کنید. این دسترسی به بات اجازه می‌دهد تا اطلاعات اولیه کانال و وضعیت عضویت کاربران را بررسی کند و هیچ تغییری در کانال شما ایجاد نمی‌کند.
+                        هنگام اضافه کردن بات، تمام دسترسی‌ها را فعال کنید تا بات بتواند وضعیت کانال و عضویت کاربران را بررسی کند. نیازی به فعال کردن دسترسی «افزودن ادمین‌های جدید» نیست.
                       </p>
                     </div>
                   </div>
