@@ -146,7 +146,9 @@ export default function CreateCampaignPage() {
   const goStep2 = async () => {
     if (!channel.trim()) return;
     setError(null);
-    setCreating(true);
+    // Move to step 2 immediately so checking animation shows
+    setStep(2);
+    setChecking(true);
     try {
       const res = await createMutation.mutateAsync({
         channelUsername: channel.replace(/^@/, ""),
@@ -154,16 +156,14 @@ export default function CreateCampaignPage() {
         name: `کمپین ${channel}`,
       });
       setCampaignId(res.id);
-      setStep(2);
-      setChecking(true);
       try {
         const r = await apiRequest<{ hasBot: boolean }>(`/api/v1/campaigns/${res.id}/check-bot`);
         setBotFound(r.hasBot);
       } catch { setBotFound(false); }
-      finally { setChecking(false); }
     } catch (err) {
       setError((err as { message?: string }).message || "خطا در ایجاد کمپین");
-    } finally { setCreating(false); }
+      setStep(1);
+    } finally { setChecking(false); }
   };
 
   /* ── Step 2 → 3 ── */
