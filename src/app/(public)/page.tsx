@@ -6,6 +6,7 @@ import {
   Send, BarChart3, Wallet, CheckCircle, BookOpen,
 } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
+import { HeroOrderCard } from "@/components/hero-order-card";
 import { faqSchema, softwareApplicationSchema } from "@/lib/schemas";
 
 export const metadata: Metadata = {
@@ -141,55 +142,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* left: campaign mockup — visible on all screens */}
+            {/* left: interactive order card */}
             <div>
-              <div className="relative rounded-2xl border border-border/40 bg-surface shadow-2xl shadow-black/5 overflow-hidden">
-                <div className="flex items-center gap-2 border-b border-border/30 px-3 md:px-4 py-2.5 md:py-3 bg-surface-elevated/50">
-                  <div className="flex gap-1.5">
-                    <span className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-red-400/70" />
-                    <span className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-amber-400/70" />
-                    <span className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-green-400/70" />
-                  </div>
-                  <span className="text-[9px] md:text-[10px] text-text-tertiary mr-2 font-mono">aplet.ir/workspace</span>
-                </div>
-                <div className="p-3 md:p-5 space-y-3 md:space-y-4">
-                  <div className="rounded-xl border border-border/30 bg-background/50 p-3 md:p-4">
-                    <p className="text-[11px] md:text-xs font-semibold text-text-primary mb-2 md:mb-3">ایجاد کمپین جدید</p>
-                    <div className="space-y-2.5 md:space-y-3">
-                      <div>
-                        <label className="text-[9px] md:text-[10px] text-text-tertiary block mb-1">کانال مقصد</label>
-                        <div className="flex items-center gap-2 rounded-lg border border-border/40 bg-surface px-2.5 md:px-3 py-1.5 md:py-2">
-                          <Send className="h-3 w-3 md:h-3.5 md:w-3.5 text-text-tertiary" />
-                          <span className="text-[11px] md:text-xs text-text-secondary">@mychannel</span>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="text-[9px] md:text-[10px] text-text-tertiary block mb-1">تعداد اعضا: ۵۰۰</label>
-                        <div className="h-1.5 md:h-2 rounded-full bg-border/30 overflow-hidden">
-                          <div className="h-full w-[50%] rounded-full bg-gradient-to-l from-primary to-accent" />
-                        </div>
-                        <div className="flex justify-between mt-1">
-                          <span className="text-[8px] md:text-[9px] text-text-tertiary">۱۰۰</span>
-                          <span className="text-[8px] md:text-[9px] text-primary font-medium">۱,۰۰۰,۰۰۰ تومان</span>
-                          <span className="text-[8px] md:text-[9px] text-text-tertiary">۱۰,۰۰۰</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 md:gap-3">
-                    <div className="rounded-xl border border-border/30 bg-background/50 p-2.5 md:p-3">
-                      <p className="text-[9px] md:text-[10px] text-text-tertiary mb-0.5 md:mb-1">اعضای جذب شده</p>
-                      <p className="text-sm md:text-base font-bold text-text-primary">۲,۳۴۰</p>
-                      <p className="text-[9px] md:text-[10px] text-emerald-500 font-medium">+۱۲٪ امروز</p>
-                    </div>
-                    <div className="rounded-xl border border-border/30 bg-background/50 p-2.5 md:p-3">
-                      <p className="text-[9px] md:text-[10px] text-text-tertiary mb-0.5 md:mb-1">کمپین فعال</p>
-                      <p className="text-sm md:text-base font-bold text-text-primary">۳</p>
-                      <p className="text-[9px] md:text-[10px] text-primary font-medium">در حال پردازش</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HeroOrderCard />
             </div>
           </div>
         </div>
