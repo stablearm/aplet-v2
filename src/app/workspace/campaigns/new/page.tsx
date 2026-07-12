@@ -183,6 +183,10 @@ export default function CreateCampaignPage() {
 
   const goStep4 = () => { if (campaignName.trim()) setStep(4); };
 
+  const handleFinalSubmit = () => {
+    if (campaignId) router.push(`/workspace/campaigns/${campaignId}`);
+  };
+
   return (
     <div className="max-w-2xl mx-auto py-4" dir="rtl">
       {/* Title */}
