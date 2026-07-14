@@ -12,8 +12,10 @@ import { getRefreshToken } from "@/lib/api-client";
 
 const mainNav = [
   { href: "/features", label: "امکانات" },
-  { href: "/pricing", label: "تعرفه" },
   { href: "/how-it-works", label: "نحوه کار" },
+  { href: "/tools", label: "ابزارها" },
+  { href: "/glossary", label: "واژه‌نامه تلگرام" },
+  { href: "/guides", label: "راهنماها" },
   { href: "/blog", label: "وبلاگ" },
 ];
 
